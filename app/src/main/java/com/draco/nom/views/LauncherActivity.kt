@@ -6,6 +6,7 @@ import android.view.View
 import android.widget.ProgressBar
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import android.content.Intent
 import com.draco.nom.databinding.ActivityLauncherBinding
 import com.draco.nom.viewmodels.LauncherActivityViewModel
 
@@ -43,11 +44,21 @@ class LauncherActivity: AppCompatActivity() {
 
         /* Setup the recycler view now */
         viewModel.prepareRecycler(this, binding.recycler)
+        // start the foreground service that will show a notification and toasts
+        val svcIntent = Intent(this, com.draco.nom.services.LauncherForegroundService::class.java).apply {
+            action = com.draco.nom.services.LauncherForegroundService.ACTION_START
+        }
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) startForegroundService(svcIntent) else startService(svcIntent)
     }
 
     override fun onResume() {
         super.onResume()
         viewModel.updatePackageIdList()
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        // do not stop the foreground service here; it runs independently
     }
 
     override fun onBackPressed() {}

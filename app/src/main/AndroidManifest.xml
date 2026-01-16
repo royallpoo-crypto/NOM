@@ -3,6 +3,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     package="com.draco.nom">
 
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+
     <uses-feature android:name="android.software.leanback" android:required="false" />
     <uses-feature android:name="android.hardware.touchscreen" android:required="false" />
 
@@ -38,6 +40,10 @@
                 <category android:name="android.intent.category.SECONDARY_HOME" />
             </intent-filter>
         </activity>
+        <service
+            android:name=".services.LauncherForegroundService"
+            android:exported="false"
+            />
     </application>
 
 </manifest>
